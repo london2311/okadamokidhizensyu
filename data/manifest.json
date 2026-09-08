@@ -1,0 +1,180 @@
+{
+ "volumes": [
+  {
+   "slug": "kowa01",
+   "label": "講話01",
+   "group": "講話篇",
+   "count": 497,
+   "kb": 1307
+  },
+  {
+   "slug": "kowa02",
+   "label": "講話02",
+   "group": "講話篇",
+   "count": 736,
+   "kb": 1271
+  },
+  {
+   "slug": "kowa03",
+   "label": "講話03",
+   "group": "講話篇",
+   "count": 925,
+   "kb": 1327
+  },
+  {
+   "slug": "kowa04",
+   "label": "講話04",
+   "group": "講話篇",
+   "count": 500,
+   "kb": 1273
+  },
+  {
+   "slug": "kowa05",
+   "label": "講話05",
+   "group": "講話篇",
+   "count": 526,
+   "kb": 1251
+  },
+  {
+   "slug": "kowa06",
+   "label": "講話06",
+   "group": "講話篇",
+   "count": 290,
+   "kb": 918
+  },
+  {
+   "slug": "kowa07",
+   "label": "講話07",
+   "group": "講話篇",
+   "count": 239,
+   "kb": 1196
+  },
+  {
+   "slug": "kowa08",
+   "label": "講話08",
+   "group": "講話篇",
+   "count": 115,
+   "kb": 960
+  },
+  {
+   "slug": "kowa09",
+   "label": "講話09",
+   "group": "講話篇",
+   "count": 199,
+   "kb": 799
+  },
+  {
+   "slug": "kowa10",
+   "label": "講話10",
+   "group": "講話篇",
+   "count": 296,
+   "kb": 259
+  },
+  {
+   "slug": "kowa11",
+   "label": "講話11",
+   "group": "講話篇",
+   "count": 266,
+   "kb": 1135
+  },
+  {
+   "slug": "kowa12",
+   "label": "講話12",
+   "group": "講話篇",
+   "count": 205,
+   "kb": 1010
+  },
+  {
+   "slug": "chojutsu01",
+   "label": "著述01",
+   "group": "著述篇",
+   "count": 137,
+   "kb": 695
+  },
+  {
+   "slug": "chojutsu02",
+   "label": "著述02",
+   "group": "著述篇",
+   "count": 198,
+   "kb": 849
+  },
+  {
+   "slug": "chojutsu03",
+   "label": "著述03",
+   "group": "著述篇",
+   "count": 184,
+   "kb": 945
+  },
+  {
+   "slug": "chojutsu04",
+   "label": "著述04",
+   "group": "著述篇",
+   "count": 154,
+   "kb": 1063
+  },
+  {
+   "slug": "chojutsu05",
+   "label": "著述05",
+   "group": "著述篇",
+   "count": 133,
+   "kb": 666
+  },
+  {
+   "slug": "chojutsu06",
+   "label": "著述06",
+   "group": "著述篇",
+   "count": 150,
+   "kb": 718
+  },
+  {
+   "slug": "chojutsu07",
+   "label": "著述07",
+   "group": "著述篇",
+   "count": 254,
+   "kb": 897
+  },
+  {
+   "slug": "chojutsu08",
+   "label": "著述08",
+   "group": "著述篇",
+   "count": 302,
+   "kb": 1131
+  },
+  {
+   "slug": "chojutsu09",
+   "label": "著述09",
+   "group": "著述篇",
+   "count": 244,
+   "kb": 966
+  },
+  {
+   "slug": "chojutsu10",
+   "label": "著述10",
+   "group": "著述篇",
+   "count": 282,
+   "kb": 1304
+  },
+  {
+   "slug": "chojutsu11",
+   "label": "著述11",
+   "group": "著述篇",
+   "count": 429,
+   "kb": 1225
+  },
+  {
+   "slug": "chojutsu12",
+   "label": "著述12",
+   "group": "著述篇",
+   "count": 146,
+   "kb": 668
+  },
+  {
+   "slug": "shiika",
+   "label": "詩歌",
+   "group": "詩歌篇",
+   "count": 1310,
+   "kb": 2302
+  }
+ ],
+ "total": 8717
+}
