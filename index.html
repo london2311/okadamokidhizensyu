@@ -19,102 +19,105 @@
 html,body{margin:0;padding:0}
 body{
   background:var(--paper);color:var(--sumi);
-  font-family:var(--gothic);
-  font-size:15px;line-height:1.7;
+  font-family:var(--gothic);font-size:15px;line-height:1.7;
   -webkit-text-size-adjust:100%;
 }
-.wrap{max-width:820px;margin:0 auto;padding:28px 20px 96px}
+.wrap{max-width:820px;margin:0 auto;padding:26px 20px 96px}
+h1{font-family:var(--mincho);font-size:24px;font-weight:600;letter-spacing:.16em;margin:0 0 4px}
+.lead{color:var(--usu);font-size:13px;margin:0 0 20px}
 
-h1{
-  font-family:var(--mincho);
-  font-size:24px;font-weight:600;letter-spacing:.16em;
-  margin:0 0 4px;
+.tabs{display:flex;gap:24px;border-bottom:2px solid var(--sumi);margin:0 0 20px}
+.tab{
+  font-family:var(--mincho);font-size:17px;letter-spacing:.08em;
+  background:none;border:0;padding:8px 2px;margin-bottom:-2px;
+  color:#9DA29A;cursor:pointer;border-bottom:2px solid transparent;
 }
-.lead{color:var(--usu);font-size:13px;margin:0 0 26px}
+.tab[aria-selected="true"]{color:var(--sumi);border-bottom-color:var(--shu)}
+.tab:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+.pane[hidden]{display:none}
 
-/* 背表紙の棚 */
-.shelf{margin:0 0 22px}
 .group{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
 .group-name{font-family:var(--mincho);font-size:14px;letter-spacing:.1em}
-.group-toggle{
-  border:0;background:none;color:var(--ai);cursor:pointer;
-  font-family:var(--gothic);font-size:12px;padding:0;text-decoration:underline;
-}
-.spines{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 16px}
+.group-toggle{border:0;background:none;color:var(--ai);cursor:pointer;font-size:12px;padding:0;text-decoration:underline}
+.spines{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 16px}
 .spine{
-  font-family:var(--mincho);font-size:13px;
-  min-width:52px;padding:9px 6px 10px;
-  border:1px solid var(--kei);border-radius:1px;
-  background:#F7F8F4;color:var(--sumi);
+  font-family:var(--mincho);font-size:13px;min-width:56px;padding:10px 7px 11px;
+  border:1px solid var(--kei);border-radius:1px;background:#F7F8F4;color:var(--sumi);
   cursor:pointer;text-align:center;line-height:1.3;
 }
 .spine .n{display:block;font-size:10px;font-family:var(--gothic);color:var(--usu);margin-top:3px}
 .spine[aria-pressed="false"]{background:transparent;color:#A9AEA5;border-style:dashed}
 .spine[aria-pressed="false"] .n{color:#B7BBB3}
+.spine:hover{border-color:var(--ai)}
 .spine:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
 
-/* 検索欄 */
-.search{border-top:2px solid var(--sumi);padding-top:14px}
-.field{display:flex;gap:8px;align-items:stretch}
-#q{
-  flex:1;min-width:0;
-  font-family:var(--mincho);font-size:19px;
-  padding:12px 14px;
-  border:1px solid var(--kei);border-radius:2px;background:#FBFCF9;color:var(--sumi);
-}
+.field{display:flex;gap:8px}
+#q{flex:1;min-width:0;font-family:var(--mincho);font-size:19px;padding:12px 14px;
+  border:1px solid var(--kei);border-radius:2px;background:#FBFCF9;color:var(--sumi)}
 #q:focus{outline:2px solid var(--ai);outline-offset:-1px;border-color:var(--ai)}
-#go{
-  font-family:var(--gothic);font-size:14px;
-  padding:0 22px;border:1px solid var(--sumi);border-radius:2px;
-  background:var(--sumi);color:var(--paper);cursor:pointer;
-}
-#go:hover{background:#000}
+#go{font-family:var(--gothic);font-size:14px;padding:0 22px;border:1px solid var(--sumi);
+  border-radius:2px;background:var(--sumi);color:var(--paper);cursor:pointer}
 .opts{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:10px 0 0;font-size:13px;color:var(--usu)}
-.opts label{cursor:pointer}
 .status{margin:14px 0 0;font-size:13px;color:var(--usu);min-height:20px}
 
-/* 結果 */
-.hits{margin:26px 0 0;padding:0;list-style:none}
+.hits{margin:22px 0 0;padding:0;list-style:none}
 .hit{border-top:1px solid var(--kei);padding:16px 0}
 .hit:first-child{border-top:2px solid var(--sumi)}
 .hit-title{font-family:var(--mincho);font-size:17px;margin:0 0 3px;line-height:1.5}
 .hit-src{font-size:12px;color:var(--usu);margin:0 0 9px}
-.snippet{
-  font-family:var(--mincho);font-size:15px;line-height:1.95;
-  margin:0;max-width:70ch;
-}
-.full{
-  font-family:var(--mincho);font-size:15px;line-height:2.0;
-  margin:12px 0 0;max-width:70ch;white-space:pre-wrap;
-  border-left:2px solid var(--kei);padding-left:14px;
-}
+.snippet{font-family:var(--mincho);font-size:15px;line-height:1.95;margin:0;max-width:70ch}
 mark{background:rgba(195,59,30,.16);color:var(--shu);padding:0 1px;border-radius:1px}
-.acts{display:flex;gap:14px;margin:10px 0 0}
-.acts button{
-  border:0;background:none;padding:0;cursor:pointer;
-  font-family:var(--gothic);font-size:13px;color:var(--ai);text-decoration:underline;
-}
+.acts{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0 0}
+.acts button{border:0;background:none;padding:0;cursor:pointer;font-size:13px;color:var(--ai);text-decoration:underline}
 .acts button:hover{color:var(--shu)}
-.empty{font-family:var(--mincho);font-size:16px;color:var(--usu);margin:34px 0 0}
+.empty{font-family:var(--mincho);font-size:16px;color:var(--usu);margin:30px 0 0}
+
+.crumb{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;margin:0 0 14px}
+.crumb button{border:0;background:none;padding:0;cursor:pointer;font-size:14px;color:var(--ai);text-decoration:underline}
+.crumb h2{font-family:var(--mincho);font-size:20px;font-weight:600;margin:0;letter-spacing:.08em}
+.crumb .count{font-size:12px;color:var(--usu)}
+#filter{width:100%;font-family:var(--mincho);font-size:16px;padding:10px 12px;
+  border:1px solid var(--kei);border-radius:2px;background:#FBFCF9;color:var(--sumi)}
+.toc{list-style:none;margin:14px 0 0;padding:0;border-top:2px solid var(--sumi)}
+.toc li{border-bottom:1px solid var(--kei)}
+.toc button{
+  display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;
+  padding:13px 4px;color:var(--sumi);font-family:var(--mincho);font-size:16px;line-height:1.5;
+}
+.toc button:hover{background:rgba(36,66,95,.05)}
+.toc .src{display:block;font-family:var(--gothic);font-size:11.5px;color:var(--usu);margin-top:3px;line-height:1.5}
+.toc .none{color:#A9AEA5}
+
+.read-title{font-family:var(--mincho);font-size:22px;font-weight:600;line-height:1.5;margin:0 0 6px}
+.read-src{font-size:12.5px;color:var(--usu);margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--kei)}
+.read-body{font-family:var(--mincho);font-size:17px;line-height:2.05;white-space:pre-wrap;max-width:66ch;margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;margin:26px 0 0;padding-top:16px;border-top:1px solid var(--kei)}
+.pager button{background:none;border:0;padding:6px 0;cursor:pointer;font-size:14px;color:var(--ai);text-decoration:underline}
+.pager button:disabled{color:#B7BBB3;cursor:default;text-decoration:none}
+.tool{margin:18px 0 0}
+.tool button{background:none;border:0;padding:0;cursor:pointer;font-size:13px;color:var(--ai);text-decoration:underline}
+
 @media (max-width:520px){
   .wrap{padding:20px 14px 80px}
   #q{font-size:17px}
   #go{padding:0 16px}
-}
-@media (prefers-reduced-motion:no-preference){
-  .full{animation:open .18s ease-out}
-  @keyframes open{from{opacity:0}to{opacity:1}}
+  .read-body{font-size:16px}
+  .toc button{padding:15px 4px}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>全集検索</h1>
-  <p class="lead">講話篇・著述篇・詩歌篇を横断して探し、必要な項だけを取り出します。</p>
+  <p class="lead">講話篇・著述篇・詩歌篇を横断して探し、冊子ごとに開いて読みます。</p>
 
-  <div class="shelf" id="shelf"></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" id="tab-search" role="tab" aria-selected="true">探す</button>
+    <button class="tab" id="tab-read" role="tab" aria-selected="false">読む</button>
+  </div>
 
-  <div class="search">
+  <section class="pane" id="pane-search" role="tabpanel">
+    <div id="shelf-search"></div>
     <div class="field">
       <input id="q" type="search" placeholder="ことばを入れて検索" autocomplete="off" spellcheck="false">
       <button id="go">検索</button>
@@ -125,73 +128,93 @@ mark{background:rgba(195,59,30,.16);color:var(--shu);padding:0 1px;border-radius
       <span id="scope"></span>
     </div>
     <p class="status" id="status"></p>
-  </div>
+    <ul class="hits" id="hits"></ul>
+  </section>
 
-  <ul class="hits" id="hits"></ul>
+  <section class="pane" id="pane-read" role="tabpanel" hidden>
+    <div id="read-view"></div>
+  </section>
 </div>
 
 <script>
 const RUBY = /《[^》]*》/g;
-const state = { man:null, sel:new Set(), cache:new Map(), busy:false };
+const state = { man:null, sel:new Set(), cache:new Map(), busy:false, vol:null, tocScroll:0 };
 const $ = s => document.querySelector(s);
 
-// ---- 起動 ----
-fetch('data/manifest.json')
-  .then(r => r.json())
-  .then(m => { state.man = m; m.volumes.forEach(v => state.sel.add(v.slug)); renderShelf(); updateScope(); })
-  .catch(() => { $('#status').textContent = 'data/manifest.json が読めません。ファイルの場所を確認してください。'; });
+fetch('data/manifest.json').then(r => r.json()).then(m => {
+  state.man = m;
+  m.volumes.forEach(v => state.sel.add(v.slug));
+  buildShelf($('#shelf-search'), true);
+  updateScope();
+  renderShelfView();
+  route();
+}).catch(() => { $('#status').textContent = 'data/manifest.json が読めません。ファイルの場所を確認してください。'; });
 
-function renderShelf(){
-  const shelf = $('#shelf');
+$('#tab-search').onclick = () => setTab('search');
+$('#tab-read').onclick = () => setTab('read');
+function setTab(which){
+  const s = which === 'search';
+  $('#tab-search').setAttribute('aria-selected', s);
+  $('#tab-read').setAttribute('aria-selected', !s);
+  $('#pane-search').hidden = !s;
+  $('#pane-read').hidden = s;
+}
+
+function buildShelf(host, selectable){
   const groups = [...new Set(state.man.volumes.map(v => v.group))];
-  shelf.innerHTML = '';
+  host.innerHTML = '';
   groups.forEach(g => {
     const vols = state.man.volumes.filter(v => v.group === g);
     const head = document.createElement('div');
     head.className = 'group';
     const name = document.createElement('span');
     name.className = 'group-name'; name.textContent = g;
-    const tog = document.createElement('button');
-    tog.className = 'group-toggle'; tog.textContent = 'まとめて切り替え';
-    tog.onclick = () => {
-      const on = vols.some(v => state.sel.has(v.slug));
-      vols.forEach(v => on ? state.sel.delete(v.slug) : state.sel.add(v.slug));
-      syncShelf(); updateScope();
-    };
-    head.append(name, tog);
+    head.append(name);
+    if (selectable){
+      const tog = document.createElement('button');
+      tog.className = 'group-toggle'; tog.textContent = 'まとめて切り替え';
+      tog.onclick = () => {
+        const on = vols.some(v => state.sel.has(v.slug));
+        vols.forEach(v => on ? state.sel.delete(v.slug) : state.sel.add(v.slug));
+        syncShelf(); updateScope();
+      };
+      head.append(tog);
+    }
     const row = document.createElement('div');
     row.className = 'spines';
     vols.forEach(v => {
       const b = document.createElement('button');
       b.className = 'spine'; b.dataset.slug = v.slug;
-      b.setAttribute('aria-pressed', 'true');
       b.innerHTML = `${v.label}<span class="n">${v.count}項</span>`;
-      b.onclick = () => {
-        state.sel.has(v.slug) ? state.sel.delete(v.slug) : state.sel.add(v.slug);
-        syncShelf(); updateScope();
-      };
+      if (selectable){
+        b.setAttribute('aria-pressed', 'true');
+        b.onclick = () => {
+          state.sel.has(v.slug) ? state.sel.delete(v.slug) : state.sel.add(v.slug);
+          syncShelf(); updateScope();
+        };
+      } else {
+        b.onclick = () => { setHash(v.slug); openVolume(v.slug); };
+      }
       row.append(b);
     });
-    shelf.append(head, row);
+    host.append(head, row);
   });
 }
 function syncShelf(){
-  document.querySelectorAll('.spine').forEach(b =>
+  document.querySelectorAll('#shelf-search .spine').forEach(b =>
     b.setAttribute('aria-pressed', state.sel.has(b.dataset.slug) ? 'true' : 'false'));
 }
 function updateScope(){
   const vols = state.man.volumes.filter(v => state.sel.has(v.slug));
   const n = vols.reduce((a, v) => a + v.count, 0);
-  $('#scope').textContent = vols.length
-    ? `${vols.length}巻 ${n.toLocaleString()}項を対象`
-    : '巻が選ばれていません';
+  $('#scope').textContent = vols.length ? `${vols.length}巻 ${n.toLocaleString()}項を対象` : '巻が選ばれていません';
 }
 
-// ---- 読み込みと解析 ----
 async function load(slug){
   if (state.cache.has(slug)) return state.cache.get(slug);
-  const txt = await (await fetch(`data/${slug}.txt`)).text();
-  const recs = parse(txt, slug);
+  const res = await fetch(`data/${slug}.txt`);
+  if (!res.ok) throw new Error('not found');
+  const recs = parse(await res.text(), slug);
   state.cache.set(slug, recs);
   return recs;
 }
@@ -207,12 +230,132 @@ function parse(txt, slug){
     const meta = [];
     while (j < lines.length && !/^─{5,}\s*$/.test(lines[j])){ meta.push(lines[j]); j++; }
     const body = lines.slice(j + 1).join('\n').replace(/^[─\s]+|[─\s]+$/g, '');
-    out.push({ vol:label, title, src:meta.join(' ').trim(), body, flat:(title + '\n' + body).replace(RUBY, '') });
+    out.push({ slug, vol:label, no:out.length, title, src:meta.join(' ').trim(),
+               body, flat:(title + '\n' + body).replace(RUBY, '') });
   }
   return out;
 }
 
-// ---- 検索 ----
+/* 読む：冊子一覧 */
+function renderShelfView(){
+  state.vol = null;
+  const host = $('#read-view');
+  host.innerHTML = '<p class="lead" style="margin:0 0 16px">冊子を選ぶと目次が開きます。</p>';
+  const shelf = document.createElement('div');
+  host.append(shelf);
+  buildShelf(shelf, false);
+}
+
+/* 読む：目次 */
+async function openVolume(slug, backTo){
+  setTab('read');
+  state.vol = slug;
+  const v = state.man.volumes.find(x => x.slug === slug);
+  const host = $('#read-view');
+  host.innerHTML = `<p class="status">${v.label} を読み込んでいます</p>`;
+  let recs;
+  try { recs = await load(slug); }
+  catch { host.innerHTML = `<p class="status">${v.label} のデータが読めませんでした。</p>`; return; }
+
+  host.innerHTML = '';
+  const crumb = document.createElement('div'); crumb.className = 'crumb';
+  const back = document.createElement('button'); back.textContent = '冊子一覧';
+  back.onclick = () => { setHash(''); renderShelfView(); window.scrollTo(0, 0); };
+  const h2 = document.createElement('h2'); h2.textContent = v.label;
+  const cnt = document.createElement('span'); cnt.className = 'count'; cnt.textContent = `${recs.length}項`;
+  crumb.append(back, h2, cnt);
+
+  const filter = document.createElement('input');
+  filter.id = 'filter'; filter.type = 'search'; filter.placeholder = '目次の中を絞り込む';
+  const toc = document.createElement('ul'); toc.className = 'toc';
+  host.append(crumb, filter, toc);
+
+  const draw = word => {
+    const w = word.trim().normalize('NFKC').toLowerCase();
+    toc.innerHTML = '';
+    recs.forEach(r => {
+      if (w && !(r.title + ' ' + r.src).normalize('NFKC').toLowerCase().includes(w)) return;
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      const empty = !r.body.trim();
+      b.innerHTML = `<span${empty ? ' class="none"' : ''}>${escapeHtml(r.title)}${empty ? '（本文なし）' : ''}</span>` +
+                    `<span class="src">${escapeHtml(r.src)}</span>`;
+      b.onclick = () => { state.tocScroll = window.scrollY; setHash(`${slug}/${r.no}`); openRecord(slug, r.no); };
+      li.append(b); toc.append(li);
+    });
+    if (!toc.children.length) toc.innerHTML = '<li><p class="empty">見出しに見あたりません。</p></li>';
+  };
+  draw('');
+  filter.oninput = () => draw(filter.value);
+  window.scrollTo(0, backTo || 0);
+}
+
+/* 読む：本文 */
+async function openRecord(slug, no){
+  setTab('read');
+  let recs;
+  try { recs = await load(slug); } catch { return; }
+  const r = recs[no];
+  if (!r) return;
+  state.vol = slug;
+  const host = $('#read-view');
+  host.innerHTML = '';
+
+  const crumb = document.createElement('div'); crumb.className = 'crumb';
+  const back = document.createElement('button'); back.textContent = `${r.vol} の目次`;
+  back.onclick = () => { setHash(slug); openVolume(slug, state.tocScroll); };
+  const pos = document.createElement('span'); pos.className = 'count';
+  pos.textContent = `${no + 1} / ${recs.length}`;
+  crumb.append(back, pos);
+
+  const h2 = document.createElement('h2'); h2.className = 'read-title'; h2.textContent = r.title;
+  const src = document.createElement('p'); src.className = 'read-src'; src.textContent = r.src;
+  const body = document.createElement('p'); body.className = 'read-body';
+  body.textContent = r.body.trim() ? r.body : '（このデータには本文が入っていません）';
+
+  const tool = document.createElement('div'); tool.className = 'tool';
+  const copy = document.createElement('button'); copy.textContent = 'この項をコピー';
+  copy.onclick = () => copyRecord(r, copy);
+  tool.append(copy);
+
+  const pager = document.createElement('div'); pager.className = 'pager';
+  const prev = document.createElement('button'); prev.textContent = '前の項';
+  prev.disabled = no === 0;
+  prev.onclick = () => { setHash(`${slug}/${no - 1}`); openRecord(slug, no - 1); };
+  const next = document.createElement('button'); next.textContent = '次の項';
+  next.disabled = no >= recs.length - 1;
+  next.onclick = () => { setHash(`${slug}/${no + 1}`); openRecord(slug, no + 1); };
+  pager.append(prev, next);
+
+  host.append(crumb, h2, src, body, tool, pager);
+  window.scrollTo(0, 0);
+}
+
+function copyRecord(r, btn){
+  const text = `■■${r.title}■■\n${r.src}\n\n${r.body}`;
+  navigator.clipboard.writeText(text)
+    .then(() => btn.textContent = 'コピーしました')
+    .catch(() => btn.textContent = 'コピーできません');
+  setTimeout(() => btn.textContent = 'この項をコピー', 1600);
+}
+
+/* URL */
+let skipRoute = false;
+function setHash(h){
+  skipRoute = true;
+  history.pushState(null, '', h ? `#${h}` : location.pathname);
+  setTimeout(() => skipRoute = false, 0);
+}
+window.addEventListener('popstate', () => { if (!skipRoute) route(); });
+function route(){
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (!h){ if (state.vol) renderShelfView(); return; }
+  const [slug, no] = h.split('/');
+  if (!state.man.volumes.some(v => v.slug === slug)) return;
+  no === undefined ? openVolume(slug) : openRecord(slug, Number(no));
+}
+
+/* 探す */
 $('#go').onclick = run;
 $('#q').addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
 
@@ -230,21 +373,19 @@ async function run(){
   for (let i = 0; i < vols.length; i++){
     $('#status').textContent = `${vols[i].label} を調べています（${i + 1}/${vols.length}）`;
     let recs;
-    try { recs = await load(vols[i].slug); }
-    catch { $('#status').textContent = `${vols[i].label} のデータが読めませんでした。`; continue; }
+    try { recs = await load(vols[i].slug); } catch { continue; }
     for (const r of recs){
       const hay = (titleOnly ? r.title : r.flat).normalize('NFKC').toLowerCase();
       if (terms.every(t => hay.includes(t))) found.push(r);
     }
     await new Promise(r => setTimeout(r));
   }
-  render(found, terms, titleOnly);
+  renderHits(found, terms, titleOnly);
   state.busy = false; $('#go').disabled = false;
 }
 
-function render(found, terms, titleOnly){
-  const hits = $('#hits');
-  const cap = 200;
+function renderHits(found, terms, titleOnly){
+  const hits = $('#hits'), cap = 200;
   $('#status').textContent = found.length
     ? `${found.length.toLocaleString()}件が見つかりました` + (found.length > cap ? `（先頭${cap}件を表示）` : '')
     : '';
@@ -264,21 +405,11 @@ function render(found, terms, titleOnly){
       li.append(p);
     }
     const acts = document.createElement('div'); acts.className = 'acts';
-    const more = document.createElement('button'); more.textContent = '全文を開く';
-    let box = null;
-    more.onclick = () => {
-      if (box){ box.remove(); box = null; more.textContent = '全文を開く'; return; }
-      box = document.createElement('div'); box.className = 'full'; box.textContent = r.body;
-      li.append(box); more.textContent = '全文を閉じる';
-    };
+    const read = document.createElement('button'); read.textContent = 'この項を開いて読む';
+    read.onclick = () => { setHash(`${r.slug}/${r.no}`); openRecord(r.slug, r.no); };
     const copy = document.createElement('button'); copy.textContent = 'この項をコピー';
-    copy.onclick = async () => {
-      const text = `■■${r.title}■■\n${r.src}\n\n${r.body}`;
-      try { await navigator.clipboard.writeText(text); copy.textContent = 'コピーしました'; }
-      catch { copy.textContent = 'コピーできません'; }
-      setTimeout(() => copy.textContent = 'この項をコピー', 1600);
-    };
-    acts.append(more, copy);
+    copy.onclick = () => copyRecord(r, copy);
+    acts.append(read, copy);
     li.append(acts);
     hits.append(li);
   });
@@ -293,11 +424,11 @@ function snippet(body, terms){
   const from = Math.max(0, at - 70), to = Math.min(flat.length, at + 130);
   return (from ? '…' : '') + flat.slice(from, to) + (to < flat.length ? '…' : '');
 }
+function escapeHtml(t){ return t.replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
 function mark(text, terms){
-  const esc = t => t.replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
-  let out = esc(text);
+  let out = escapeHtml(text);
   terms.forEach(t => {
-    const re = new RegExp(esc(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    const re = new RegExp(escapeHtml(t).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
     out = out.replace(re, m => `<mark>${m}</mark>`);
   });
   return out;
