@@ -97,6 +97,13 @@ mark{background:rgba(195,59,30,.14);color:var(--shu);padding:0 1px;border-radius
 .pager button:last-child{text-align:right}
 .pager small{display:block;font-size:11.5px;color:var(--usu);text-decoration:none}
 .nohl mark{background:none;color:inherit}
+.hob{display:inline-block;font-family:var(--gothic);font-size:10.5px;color:var(--ai);border:1px solid var(--ai);border-radius:1px;padding:0 3px;margin-right:6px;vertical-align:2px;line-height:1.4}
+.anc{color:var(--paper);background:var(--shu);padding:0 5px;margin-right:6px;border-radius:1px}
+.seg.hen{margin:16px 0 0}
+.seg.hen button{font-family:var(--mincho);font-size:15px;padding:9px 18px}
+.leaves{margin:12px 0 0;font-size:12.5px;color:var(--usu)}
+.leaves summary{cursor:pointer;color:var(--ai)}
+.leaves p{margin:6px 0 0;line-height:1.9;color:var(--sumi);font-family:var(--mincho);font-size:13.5px}
 
 @media (max-width:640px){
   .wrap{padding:20px 14px 80px}
@@ -118,7 +125,7 @@ mark{background:rgba(195,59,30,.14);color:var(--shu);padding:0 1px;border-radius
 
 <script>
 const $ = s => document.querySelector(s);
-const S = { idx:null, man:null, recs:null, subMap:new Map(), groupOf:new Map(), topic:new Map(), vol:new Map(),
+const S = { idx:null, man:null, recs:null, subMap:new Map(), groupOf:new Map(), henOf:new Map(), hen:null, topic:new Map(), vol:new Map(),
             cur:null, list:[], opt:{ tier:1, sort:'score', grp:new Set(['kowa','chojutsu','shiika']), q:'' }, shown:100, listScroll:0, hl:true };
 const GNAME = { kowa:'講話篇', chojutsu:'著述篇', shiika:'詩歌篇' };
 const vg = slug => slug.startsWith('kowa') ? 'kowa' : slug.startsWith('cho') ? 'chojutsu' : 'shiika';
@@ -128,7 +135,8 @@ const norm = t => t.normalize('NFKC').toLowerCase();
 Promise.all([fetch('data/topics/index.json').then(r => r.json()), fetch('data/manifest.json').then(r => r.json())])
   .then(([idx, man]) => {
     S.idx = idx; S.man = man;
-    idx.groups.forEach(g => g.subs.forEach(s => { S.subMap.set(s.id, s); S.groupOf.set(s.id, g); }));
+    idx.hen.forEach(h => h.chaps.forEach(c => c.subs.forEach(s => { S.subMap.set(s.id, s); S.groupOf.set(s.id, c); S.henOf.set(s.id, h); })));
+    S.hen = idx.hen[0].id;
     route();
   })
   .catch(() => { $('#view').innerHTML = '<p class="status">data/topics/index.json が読めません。ファイルの場所を確認してください。</p>'; });
@@ -140,7 +148,7 @@ async function loadRecs(){
 async function loadTopic(id){
   if (!S.topic.has(id)) {
     const g = S.groupOf.get(id);
-    const all = await fetch(`data/topics/g-${g.id}.json`).then(r => r.json());
+    const all = await fetch(`data/topics/c-${g.id}.json`).then(r => r.json());
     Object.entries(all).forEach(([k, rows]) => S.topic.set(k, rows));
   }
   return S.topic.get(id);
@@ -172,68 +180,89 @@ function renderHome(){
   S.cur = null;
   const v = $('#view');
   v.innerHTML = `
-    <p class="lead">全集8,700余項を、浄霊・病気・霊界・信仰・芸術などの項目に分けて読めるようにしたものです。1つの項が複数の項目に入ることがあります。</p>
-    <input id="find" type="search" placeholder="項目やことばで探す　例：喘息、祖霊、茶碗" autocomplete="off" spellcheck="false">
+    <p class="lead">全集8,700余項を、通信カレッジ（明主様・岡田茂吉師御論文集）の目次立てにそって、編・章・項目に分けて読めるようにしたものです。1つの項が複数の項目に入ることがあります。<span class="hob">補</span>は目次にない分野を補った項目です。</p>
+    <input id="find" type="search" placeholder="項目やことばで探す　例：喘息、位牌、狐霊、茶碗" autocomplete="off" spellcheck="false">
+    <div class="seg hen" id="hen"></div>
     <nav class="jump" id="jump"></nav>
+    <p class="status" style="margin:4px 0 0">数字は　<b style="color:var(--shu)">目次対応・主に説かれた項</b>　/　ふれている項もふくめた数</p>
     <div id="groups"></div>`;
-  const jump = $('#jump');
-  S.idx.groups.forEach(g => {
-    const b = document.createElement('button'); b.textContent = g.name;
-    b.onclick = () => document.getElementById('g-' + g.id).scrollIntoView();
-    jump.append(b);
+  const henBox = $('#hen');
+  S.idx.hen.forEach(h => {
+    const b = document.createElement('button'); b.textContent = h.name; b.dataset.h = h.id;
+    b.onclick = () => { S.hen = h.id; $('#find').value = ''; draw(''); window.scrollTo(0, 0); };
+    henBox.append(b);
   });
   const draw = q => {
     const host = $('#groups'); host.innerHTML = '';
     const w = norm(q.trim());
+    document.querySelectorAll('#hen button').forEach(b => b.setAttribute('aria-pressed', !w && b.dataset.h === S.hen));
+    const jump = $('#jump'); jump.innerHTML = '';
     let any = false;
-    S.idx.groups.forEach(g => {
-      const subs = g.subs.map(s => {
-        if (!w) return [s, ''];
-        if (norm(s.name + s.desc + g.name).includes(w)) return [s, ''];
-        const hit = s.words.find(x => norm(x).includes(w) || w.includes(norm(x)) && x.length >= 2);
-        return hit ? [s, hit] : null;
-      }).filter(Boolean);
-      if (!subs.length) return;
-      any = true;
-      const sec = document.createElement('section'); sec.className = 'grp'; sec.id = 'g-' + g.id;
-      sec.innerHTML = `<div class="grp-head"><h2>${esc(g.name)}</h2><p>${esc(g.desc)}</p></div>`;
-      const ul = document.createElement('ul'); ul.className = 'subs';
-      subs.forEach(([s, why]) => {
-        const li = document.createElement('li');
-        const b = document.createElement('button'); b.className = 'sub';
-        b.innerHTML = `<span class="nm"><span>${esc(s.name)}</span><span class="ct"><b>${s.n1}</b> / ${s.n}項</span></span>` +
-                      `<span class="ds">${esc(s.desc)}</span>` + (why ? `<span class="why">「${esc(why)}」をふくむ項目</span>` : '');
-        b.onclick = () => go(`t/${s.id}`);
-        li.append(b); ul.append(li);
+    S.idx.hen.forEach(h => {
+      if (!w && h.id !== S.hen) return;
+      h.chaps.forEach(c => {
+        const subs = c.subs.map(s => {
+          if (!s.n) return null;
+          if (!w) return [s, ''];
+          if (norm(s.name + c.name + h.name).includes(w)) return [s, ''];
+          const leaf = s.leaves.find(x => norm(x).includes(w));
+          if (leaf) return [s, '目次：' + leafUnique([leaf])[0]];
+          const hit = s.words.find(x => x.length >= 1 && (norm(x).includes(w) || (w.includes(norm(x)) && x.length >= 2)));
+          return hit ? [s, `「${hit}」をふくむ`] : null;
+        }).filter(Boolean);
+        if (!subs.length) return;
+        any = true;
+        const sec = document.createElement('section'); sec.className = 'grp'; sec.id = 'g-' + c.id;
+        sec.innerHTML = `<div class="grp-head"><h2>${esc(c.name)}</h2>${w ? `<p>${esc(h.name)}</p>` : (c.desc ? `<p>${esc(c.desc)}</p>` : '')}</div>`;
+        if (!w) { const j = document.createElement('button'); j.textContent = c.name.replace(/（.*）/, ''); j.onclick = () => sec.scrollIntoView(); jump.append(j); }
+        const ul = document.createElement('ul'); ul.className = 'subs';
+        subs.forEach(([s, why]) => {
+          const li = document.createElement('li');
+          const b = document.createElement('button'); b.className = 'sub';
+          b.innerHTML = `<span class="nm"><span>${s.ho ? '<span class="hob">補</span>' : ''}${esc(s.name.replace('（補）', ''))}</span><span class="ct"><b>${s.n1}</b> / ${s.n}項</span></span>` +
+            (s.leaves.length ? `<span class="ds">${esc(leafSummary(s.leaves))}</span>` : '') + (why ? `<span class="why">${esc(why)}</span>` : '');
+          b.onclick = () => go(`t/${s.id}`);
+          li.append(b); ul.append(li);
+        });
+        sec.append(ul); host.append(sec);
       });
-      sec.append(ul); host.append(sec);
     });
     if (!any) host.innerHTML = '<p class="none">当てはまる項目がありません。全文から探すときは<a href="./">全集検索</a>を使ってください。</p>';
   };
   draw('');
   $('#find').oninput = e => draw(e.target.value);
-  $('#jump').insertAdjacentHTML('afterend', '<p class="status" style="margin:4px 0 0">数字は　<b style="color:var(--shu)">主に説かれた項</b>　/　ふれている項もふくめた数</p>');
   window.scrollTo(0, S.homeScroll || 0);
+}
+function leafUnique(leaves){
+  const out = [];
+  leaves.forEach(t => { const b = t.replace(/[\s　]*[0-9０-９]+[\s　]*(?=（|$)/g, '').replace(/[\s　]+/g, ''); if (!out.includes(b)) out.push(b); });
+  return out;
+}
+function leafSummary(leaves){
+  const v = [...new Set(leafUnique(leaves).map(x => x.replace(/（.*?）/g, '')))];
+  const t = v.slice(0, 7).join('、');
+  return v.length > 7 ? t + ` ほか${v.length - 7}` : t;
 }
 
 /* ---------- 項目 ---------- */
 async function renderTopic(id, keepScroll){
   const sub = S.subMap.get(id); if (!sub) return renderHome();
-  const grp = S.groupOf.get(id);
+  const grp = S.groupOf.get(id), hen = S.henOf.get(id);
   if (S.cur !== id) { S.cur = id; S.shown = 100; S.opt.q = ''; S.opt.tier = sub.n1 >= 5 ? 1 : 2; }
+  S.hen = hen.id;
   const v = $('#view');
   v.innerHTML = '<p class="status">読み込んでいます</p>';
   const [recs, rows] = await Promise.all([loadRecs(), loadTopic(id)]);
   const rx = rxOf(sub);
 
   v.innerHTML = `
-    <div class="crumb"><button id="b-home">項目一覧</button><span>${esc(grp.name)}</span></div>
-    <h2 class="t-name">${esc(sub.name)}</h2>
-    <p class="t-desc">${esc(sub.desc)}</p>
+    <div class="crumb"><button id="b-home">項目一覧</button><span>${esc(hen.name)}　${esc(grp.name)}</span></div>
+    <h2 class="t-name">${sub.ho ? '<span class="hob">補</span>' : ''}${esc(sub.name.replace('（補）', ''))}</h2>
+    ${sub.leaves.length ? `<details class="leaves"><summary>通信カレッジ目次の細目（${leafUnique(sub.leaves).length}）</summary><p>${leafUnique(sub.leaves).map(esc).join('　')}</p></details>` : ''}
     ${sub.words.length ? `<p class="t-words">拾っていることば　${sub.words.slice(0, 40).map(w => `<span>${esc(w)}</span>`).join('')}</p>` : ''}
     <div class="ctrl">
       <div class="seg" id="tier">
-        <button data-t="1">主に説かれた項　${sub.n1}</button><button data-t="2">ふれている項もふくめる　${sub.n}</button>
+        <button data-t="1">${sub.n0 ? '目次対応・' : ''}主に説かれた項　${sub.n1}</button><button data-t="2">ふれている項もふくめる　${sub.n}</button>
       </div>
       <div class="ctrl-row" id="grps"></div>
       <div class="ctrl-row">
@@ -285,7 +314,7 @@ async function renderTopic(id, keepScroll){
       const b = document.createElement('button'); b.className = 'row';
       const q = x[4] === 'q' ? '<span class="q">問</span>' : '';
       b.innerHTML = `<span class="r-title">${q}${esc(x[3])}</span>` +
-        `<span class="r-meta">${r[1] === 1 ? '<span class="main">主　</span>' : ''}${esc(volLabel(x[0]))}　${esc(wareki(x[2]))}</span>` +
+        `<span class="r-meta">${r[1] === 0 ? '<span class="anc">目次対応</span>' : r[1] === 1 ? '<span class="main">主　</span>' : ''}${esc(volLabel(x[0]))}　${esc(wareki(x[2]))}</span>` +
         `<span class="r-snip">${mark(r[3], rx)}</span>`;
       b.onclick = () => { S.listScroll = window.scrollY; go(`t/${id}/${x[0]}/${x[1]}`); };
       li.append(b); ul.append(li);
@@ -306,8 +335,8 @@ async function renderTopic(id, keepScroll){
 
 function related(sub, rows, recs){
   const c = new Map();
-  rows.forEach(r => { if (r[1] !== 1) return; recs[r[0]][7].forEach(code => {
-    if (code % 2) return; const sid = S.idx.subs[code >> 1]; if (sid === sub.id) return;
+  rows.forEach(r => { if (r[1] > 1) return; recs[r[0]][7].forEach(code => {
+    if (code % 3 === 2) return; const sid = S.idx.subs[Math.floor(code / 3)]; if (sid === sub.id || !S.subMap.has(sid)) return;
     c.set(sid, (c.get(sid) || 0) + 1); }); });
   const top = [...c.entries()]
     .map(([sid, n]) => [sid, n / Math.sqrt(S.subMap.get(sid).n1 + 20)])
@@ -387,14 +416,14 @@ async function renderRecord(id, slug, no){
   };
 
   if (x) {
-    const codes = x[7].slice().sort((a, b) => (a % 2) - (b % 2));
+    const codes = x[7].slice().sort((a, b) => (a % 3) - (b % 3));
     const bel = $('#bel');
     bel.innerHTML = '<h3>この項が入っている項目</h3>';
     const chips = document.createElement('div'); chips.className = 'chips';
     codes.forEach(code => {
-      const sid = S.idx.subs[code >> 1]; const s = S.subMap.get(sid);
-      const b = document.createElement('button'); b.className = 'chip' + (code % 2 ? ' lt' : '');
-      b.textContent = s.name; b.title = code % 2 ? 'ふれている' : '主に説かれている';
+      const sid = S.idx.subs[Math.floor(code / 3)]; const s = S.subMap.get(sid); if (!s) return;
+      const b = document.createElement('button'); b.className = 'chip' + (code % 3 === 2 ? ' lt' : '');
+      b.textContent = s.name.replace('（補）', ''); b.title = code % 3 === 2 ? 'ふれている' : '主に説かれている';
       b.onclick = () => go(`t/${sid}`);
       chips.append(b);
     });
